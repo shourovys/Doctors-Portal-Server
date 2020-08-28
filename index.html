@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>hello Node e</h1>
+
+
+
+
+    <button id='add'>add</button>
+
+
+
+
+
+
+
+
+    <script>
+        // fetch('http://localhost:4200/')
+        //     .then(res => res.json())
+        //     .then(data => console.log(data))
+
+
+        const data = [
+            {
+                appointType: 'Teeth Orthodontics',
+                time: '8.00AM - 9.00AM',
+                spences: 10,
+                id: 1
+            },
+            {
+                appointType: 'Cosmetic Dentistry',
+                time: '10.00AM - 11.00AM',
+                spences: 10,
+                id: 2
+            },
+            {
+                appointType: 'Teeth Cleaning',
+                time: '5.00AM - 6.30AM',
+                spences: 10,
+                id: 3
+            },
+            {
+                appointType: 'Cavity Protection',
+                time: '7.00AM - 8.30AM',
+                spences: 10,
+                id: 4
+            },
+            {
+                appointType: 'Teeth Orthodontics',
+                time: '8.00AM - 9.00AM',
+                spences: 10,
+                id: 5
+            },
+            {
+                appointType: 'Teeth Orthodontics',
+                time: '10.00AM - 11.00AM',
+                spences: 10,
+                id: 6
+            }
+        ]
+
+        document.getElementById('add').addEventListener('click', () => {
+            fetch('http://localhost:4200/addAppointmentData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .then(data =>
+                    console.log('Success:')
+                )
+            console.log('add clicked');
+
+        })
+
+    </script>
+</body>
+
+</html>
