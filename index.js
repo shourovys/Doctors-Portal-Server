@@ -140,7 +140,7 @@ app.post('/updateAppointment', (req, res) => {//update appointment data by docto
     });
 })
 
-const port = 4200
+const port = 4200 || process.env.PORT
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 }
