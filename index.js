@@ -14,7 +14,7 @@ app.use(cors())
 app.use(bodyParser.json());
 
 // all get request
-app.get('/appointment', (req, res) => {
+app.get('/appointment', (req, res) => { //give all appointment sedule fo doctor
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
         if (err) {
@@ -36,8 +36,31 @@ app.get('/appointment', (req, res) => {
     });
 })
 
+app.get('/getAppointments/:appointmentBookingData', (req, res) => { //give all appointment for doctor
+    const appointmentBookingData = req.param
+    client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
+        if (err) {
+            console.log('connection err', err)
+        } else {
+            const collection = client.db("doctorsPortal").collection("bookAppointmentData");
+            console.log('database connected successfully');
+            // perform actions on the collection object
+            collection.find({ appointmentBookingData }).toArray((error, document) => {
+                if (error) {
+                    console.log('Booking Appointment data find error', error);
+                } else {
+                    console.log('Booking Appointment data find successful');
+                    res.send(document)
+                }
+            })
+            client.close();
+        }
+    });
+})
 
-//all post request
+
+// all post request
 // app.post('/addAppointmentData', (req, res) => {
 //     const appointmentData = req.body
 //     client = new MongoClient(uri, { useNewUrlParser: true });
@@ -78,6 +101,40 @@ app.post('/bookAppointment', (req, res) => {//add book Appointment data
                     res.send(result.ops[0])
                 }
             })
+            client.close();
+        }
+    });
+})
+
+app.post('/updateAppointment', (req, res) => {//update appointment data by doctor // { action: 'Panning', bookingId: '5f476ca279be9f5f5423c457' }
+    const bookingId = req.body.bookingId
+    const query = { "_id": bookingId }
+    console.log(query)
+    const update = {
+        "$set": {
+            "action": req.body.action
+        }
+    };
+    const options = { returnNewDocument: true };
+
+    client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
+        if (err) {
+            console.log('connection err-->', err)
+        } else {
+            const collection = client.db("doctorsPortal").collection("bookAppointmentData");
+            // perform actions on the collection object
+            collection.findOneAndUpdate(query, update, options)
+                .then(updatedDocument => {
+                    if (updatedDocument) {
+                        console.log(`Successfully updated document: ${updatedDocument}.`)
+                        // res.send('successfully change')
+                    } else {
+                        console.log("No document matches the provided query.")
+                    }
+                    return updatedDocument
+                })
+                .catch(err => console.error(`Failed to find and update document: ${err}`))
             client.close();
         }
     });
