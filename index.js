@@ -5,6 +5,8 @@ require('dotenv').config()
 const MongoClient = require('mongodb').MongoClient;
 
 
+
+
 const app = express()
 const uri = process.env.DB_PATH
 console.log(uri);
